@@ -148,7 +148,7 @@ ifeq ($(PLATFORM_OS),LINUX)
     CC = gcc
 endif
 ifeq ($(PLATFORM_OS),WINDOWS)
-     CC = C:\raylib\mingw\bin\gcc.exe
+     CC = wine C:/raylib/mingw/bin/gcc.exe
 endif
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),OSX)

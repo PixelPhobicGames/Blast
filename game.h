@@ -14,13 +14,16 @@ typedef struct Game
     int round;
     int animation_counter;
     int text_y;
-
+    int IntScaler;
+    time_t time;
     Shader Scanlines;
     Texture2D map_0; 
     Texture2D map_1; 
     Texture2D map_0_bg;
     Music titlemusic; 
     Music victory; 
+    Music Invaders;
+
 }Game;
 static Game game;
 
@@ -30,7 +33,9 @@ static void EnemyRestart(){
         enemy[i].y = 50;
         enemy[i].isalive = true;
         enemy[i].speed = 1;
-
+        enemy[i].projectile_trigger = false;
+        enemy[i].projectile_x = 0;
+        enemy[i].projectile_y = 0;
         enemycounter.count ++;
     }
     StopMusicStream(game.victory);
@@ -62,19 +67,22 @@ static void GameInit(){
     player.bullet_1 = LoadTexture("assets/bullets/rocket_1.png");
     game.map_0 = LoadTexture("assets/maps/map_0.png");
     game.map_0_bg = LoadTexture("assets/maps/map_0_background.png");
-    game.titlemusic = LoadMusicStream("assets/music/dread.mp3");
+    game.titlemusic = LoadMusicStream("assets/music/Phobos.mp3");
+    game.Invaders = LoadMusicStream("assets/music/Invaders.mp3");
     game.victory = LoadMusicStream("assets/sounds/win.mp3");
     game.Scanlines = LoadShader(0, TextFormat("assets/shaders/pixel.fs", 330));
     game.round = 1;
     player.x = 22;
     player.y = 406;
-    player.score = 0;
+    player.score = 1;
     player.speed = 5;
     game.level_id = 0;
     game.map_x = 0;
     game.map_y = 0;
     game.dir = 1;
     game.level = 1;
+    game.IntScaler = 1;
+    
     enemycounter.count = 0;
     EnemyRestart();
     for (int i; i < ENEMY_COUNT; i ++){
@@ -105,6 +113,7 @@ static void UpdateMusic(){
     UpdateMusicStream(game.titlemusic);
     UpdateMusicStream(enemytextures.boom);
     UpdateMusicStream(game.victory);
+    UpdateMusicStream(game.Invaders);
 }
 static void UpdateProjectiles()
 {
@@ -117,7 +126,6 @@ static void UpdateProjectiles()
             projectile[i].y = player.y - 9;
             PlayMusicStream(player.Shoot);
         }
-
         if(projectile[i].trigger){
             if (game.animation_counter <= 25){
                 DrawTexture(player.bullet_1, projectile[i].x , projectile[i].y, WHITE);
@@ -172,8 +180,42 @@ static void DrawEnemys(){
                 EnemyRestart();
                 game.level_id = 3;
             }
-            
+            if(player.score <= 0){
+                game.level_id = 2;
+            }
+            if(GenerateRandomNumber(25) == 15){
+                if (enemy[i].projectile_trigger == false){
+                    enemy[i].projectile_trigger = true;
+                    enemy[i].projectile_x =  enemy[i].x + 20;
+                    enemy[i].projectile_y =  enemy[i].y - 9;
+                }
+            }
+            if (enemy[i].projectile_trigger == true ){
+                DrawRectangle(enemy[i].projectile_x,enemy[i].projectile_y,5,5,WHITE);
+                enemy[i].projectile_y += 2*enemy[i].speed;
+                if ( enemy[i].projectile_y >= 500){
+                    enemy[i].projectile_trigger = false;
+                }
+                if (enemy[i].projectile_x >= player.x && enemy[i].projectile_x <= player.x + 50 && enemy[i].projectile_y <= player.y + 50 && enemy[i].projectile_y >= player.y){
+                    if (game.round <= 10 ){
+                        player.score -= 1*game.round;
+                    }
+                    if (game.round){
+
+                    }
+
+                    player.score -= 1;
+                    enemy[i].projectile_trigger = false;
+                }
+            }
         }
         
     }
+}
+
+
+int GenerateRandomNumber(int val){
+    srand((unsigned) time(&game.time));
+
+    return rand() % val;
 }

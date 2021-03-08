@@ -40,9 +40,13 @@ static void DrawPlayer(){
     {
         player.x += player.speed;
     }
-
-
-
     
-    
+    if(player.x >= 512){
+        player.x -= player.speed;
+
+    }
+    if(player.x <= 0){
+        player.x += player.speed;
+
+    }
 }

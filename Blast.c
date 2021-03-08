@@ -15,6 +15,7 @@ int main(void){
     InitAudioDevice();
     SetTargetFPS(60);
     GameInit();
+    
     while (!WindowShouldClose())
     {
         UpdateMusic();   
@@ -43,6 +44,7 @@ int main(void){
                     break;
             
                 case 1:
+                    PlayMusicStream(game.Invaders);
                     DrawPlayer();
                     DrawEnemys();
                     UpdateProjectiles();
@@ -52,7 +54,7 @@ int main(void){
                     if(game.animation_counter <= 50 && game.animation_counter >= 0){
                         DrawText("Game   Over", 240,220,20,WHITE);
                     }
-                    DrawText("Press Space", 235,260,20,WHITE);
+                    DrawText("Press Space", 240,260,20,WHITE);
                     if (IsKeyPressed(KEY_SPACE)){
                         GameInit();
                     }
@@ -64,8 +66,8 @@ int main(void){
                         game.text_y ++;
                     }
 
-                    DrawText(TextFormat("  Round %i" , game.round), 195,game.text_y,40,GREEN);
-                    DrawText("Press Space", 235,260,20,WHITE);
+                    DrawText(TextFormat("  Round %i" , game.round), 200,game.text_y,40,GREEN);
+                    DrawText("Press Space", 240,260,20,WHITE);
                     if (IsKeyPressed(KEY_SPACE)){
                         //GameInit();
                         game.text_y = 0;
@@ -73,12 +75,12 @@ int main(void){
 
                     }
                     break;
-
-
+                
             }
         if (game.debug){
-            DrawFPS(50,50);
-            DrawText("Blast: Debug is Enabled",50,75,20,GREEN);
+            DrawFPS(50,100);
+            DrawText(TextFormat("X: %i Y: %i", player.x , player.y),50,140,20,GREEN);
+            DrawText("Blast: Debug is Enabled",50,175,20,GREEN);
         }
         UpdateAnimations();
         EndShaderMode();

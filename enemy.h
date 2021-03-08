@@ -5,6 +5,9 @@ typedef struct Enemy
     int x;
     int y;
     int speed;
+    int projectile_x;
+    int projectile_y;
+    int projectile_trigger;
     bool isalive;
 
 }Enemy;
