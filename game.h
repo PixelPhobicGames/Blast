@@ -43,6 +43,7 @@ static void EnemyRestart(){
 }
 
 static void CloseGame(){
+
     UnloadTexture(player.player_1);
     UnloadTexture(player.bullet_1);
     UnloadTexture(player.bullet_2);
@@ -55,7 +56,9 @@ static void CloseGame(){
     UnloadShader(game.Scanlines);
     CloseWindow();
     CloseAudioDevice();
+    
 }
+
 static void GameInit(){
     enemytextures.enemy_1 = LoadTexture("assets/alien/enemy_1.png");
     enemytextures.enemy_2 = LoadTexture("assets/alien/death/frame_7.png");
@@ -82,7 +85,6 @@ static void GameInit(){
     game.dir = 1;
     game.level = 1;
     game.IntScaler = 1;
-    
     enemycounter.count = 0;
     EnemyRestart();
     for (int i; i < ENEMY_COUNT; i ++){
