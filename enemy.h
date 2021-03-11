@@ -29,9 +29,21 @@ typedef struct EnemyCounter
 
 }EnemyCounter;
 
+typedef struct PowerupDrone {
+    int x;
+    int y;
+    Texture2D texture;
+    int trigger;
+    int PowerUpLength;
+    Music sound;
+
+}PowerupDrone;
+
 #define ENEMY_COUNT 20
 
 static EnemyCounter enemycounter;
 static EnemyTextures enemytextures;
+static PowerupDrone powerupdrone;
+static PowerupDrone blastpowerupdrone;
 static Enemy enemy[ENEMY_COUNT];
 

@@ -1,4 +1,4 @@
-
+#define XBOX360_NAME_ID     "Xbox 360 Controller"
 
 typedef struct Player
 {
@@ -39,6 +39,14 @@ static void DrawPlayer(){
     if (IsKeyDown(KEY_RIGHT))
     {
         player.x += player.speed;
+    }
+    if (IsGamepadAvailable(GAMEPAD_PLAYER1)){
+        if (IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_FACE_LEFT)){
+            player.x -= player.speed;
+        }
+        if (IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_FACE_RIGHT)){
+            player.x += player.speed;
+        }
     }
     
     if(player.x >= 512){

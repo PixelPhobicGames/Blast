@@ -1,5 +1,5 @@
 // This IS NOT MINE this code belongs to Ramon Santamaria the developer of RayLib
-
+// I did Modify A Small amount of it though 
 
 #version 330
 
@@ -17,8 +17,8 @@ out vec4 finalColor;
 // NOTE: Add here your custom variables
 
 // NOTE: Render size values must be passed from code
-const float renderWidth = 800;
-const float renderHeight = 450;
+const float renderWidth = 640;
+const float renderHeight = 1000;
 float offset = 0.0;
 
 uniform float time;

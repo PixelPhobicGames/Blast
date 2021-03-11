@@ -38,6 +38,12 @@ static void EnemyRestart(){
         enemy[i].projectile_y = 0;
         enemycounter.count ++;
     }
+    powerupdrone.trigger = false;
+    powerupdrone.x = 0;
+    powerupdrone.y = -15;
+    blastpowerupdrone.trigger = false;
+    blastpowerupdrone.x = 0;
+    blastpowerupdrone.y = -15;
     StopMusicStream(game.victory);
 
 }
@@ -60,6 +66,10 @@ static void CloseGame(){
 }
 
 static void GameInit(){
+    blastpowerupdrone.PowerUpLength = 0;
+    powerupdrone.texture = LoadTexture("assets/alien/drone.png");
+    blastpowerupdrone.texture = LoadTexture("assets/alien/bdrone.png");
+    powerupdrone.sound = LoadMusicStream("assets/music/drone.mp3");
     enemytextures.enemy_1 = LoadTexture("assets/alien/enemy_1.png");
     enemytextures.enemy_2 = LoadTexture("assets/alien/death/frame_7.png");
     enemytextures.boom = LoadMusicStream("assets/sounds/boom.mp3");
@@ -107,7 +117,7 @@ static void UpdateSpaceBackground(){
     if (game.map_x == -500){
         game.map_x = 1; 
     }
-    game.map_x --;
+    game.map_x -= 1;
 }
 
 static void UpdateMusic(){
@@ -116,17 +126,28 @@ static void UpdateMusic(){
     UpdateMusicStream(enemytextures.boom);
     UpdateMusicStream(game.victory);
     UpdateMusicStream(game.Invaders);
+    UpdateMusicStream(powerupdrone.sound);
 }
 static void UpdateProjectiles()
 {
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
-        if (IsKeyPressed(KEY_SPACE) && projectile[i].trigger == false)
-        {
-            projectile[i].trigger = true;
-            projectile[i].x = player.x + 50;
-            projectile[i].y = player.y - 9;
-            PlayMusicStream(player.Shoot);
+        if (IsGamepadAvailable(GAMEPAD_PLAYER1)){
+            if (IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_RIGHT_TRIGGER_2) && projectile[i].trigger == false ){
+                projectile[i].trigger = true;
+                projectile[i].x = player.x + 50;
+                projectile[i].y = player.y - 9;
+                PlayMusicStream(player.Shoot);
+            }
+        }
+        else {
+            if (IsKeyPressed(KEY_SPACE) && projectile[i].trigger == false)
+            {
+                projectile[i].trigger = true;
+                projectile[i].x = player.x + 50;
+                projectile[i].y = player.y - 9;
+                PlayMusicStream(player.Shoot);
+            }
         }
         if(projectile[i].trigger){
             if (game.animation_counter <= 25){
@@ -141,8 +162,15 @@ static void UpdateProjectiles()
             if (game.animation_counter <= 100){
                 DrawTexture(player.bullet_2, projectile[i].x , projectile[i].y, WHITE);
             }
-            projectile[i].y -= 4;
+            if(blastpowerupdrone.PowerUpLength == 0){
+                projectile[i].y -= 5;
+            }
+            else {
+                projectile[i].y -= 12;
+            }
+
             if (projectile[i].y <= -50){
+                if(blastpowerupdrone.PowerUpLength != 0){blastpowerupdrone.PowerUpLength -= 1;}
                 projectile[i].trigger = false;
                 StopMusicStream(player.Shoot);
                 StopMusicStream(enemytextures.boom);
@@ -202,22 +230,65 @@ static void DrawEnemys(){
                     if (game.round <= 10 ){
                         player.score -= 1*game.round;
                     }
-                    if (game.round){
-
-                    }
-
                     player.score -= 1;
                     enemy[i].projectile_trigger = false;
                 }
             }
+            if (powerupdrone.trigger){
+                if (projectile[i].x >= powerupdrone.x && projectile[i].x <= powerupdrone.x + 50 && projectile[i].y <= powerupdrone.y + 50 && projectile[i].y >= powerupdrone.y){
+                    player.score += 100;
+                    StopMusicStream(powerupdrone.sound);
+                    powerupdrone.trigger = false;
+                }
+            }
+            if (blastpowerupdrone.trigger){
+                if (projectile[i].x >= blastpowerupdrone.x && projectile[i].x <= blastpowerupdrone.x + 50 && projectile[i].y <= blastpowerupdrone.y + 50 && projectile[i].y >= blastpowerupdrone.y){
+                    player.score += 50;
+                    blastpowerupdrone.PowerUpLength = 100;
+                    StopMusicStream(powerupdrone.sound);
+                    blastpowerupdrone.trigger = false;
+                }
+            }
         }
-        
+    }
+    if (GenerateRandomNumber(25) == 14 && powerupdrone.trigger == false){
+        powerupdrone.trigger = true;
+        powerupdrone.x = 500;
+        powerupdrone.y = 50;
+
+    }
+    if (powerupdrone.trigger){
+        PlayMusicStream(powerupdrone.sound);
+        DrawTexture(powerupdrone.texture, powerupdrone.x , powerupdrone.y , WHITE);
+        powerupdrone.x -= 2;
+        if (powerupdrone.x <= 0){
+            powerupdrone.x = 0;
+            powerupdrone.y = 0;
+            StopMusicStream(powerupdrone.sound);
+            powerupdrone.trigger = false;
+        }
+    }
+
+    if (GenerateRandomNumber(50) == 49 && blastpowerupdrone.trigger == false){
+        blastpowerupdrone.trigger = true;
+        blastpowerupdrone.x = 500;
+        blastpowerupdrone.y = 50;
+    }
+
+    if (blastpowerupdrone.trigger){
+        PlayMusicStream(powerupdrone.sound);
+        DrawTexture(blastpowerupdrone.texture, blastpowerupdrone.x , blastpowerupdrone.y , WHITE);
+        blastpowerupdrone.x -= 2;
+        if (blastpowerupdrone.x <= 0){
+            blastpowerupdrone.x = 0;
+            blastpowerupdrone.y = 0;
+            StopMusicStream(powerupdrone.sound);
+            blastpowerupdrone.trigger = false;
+        }
     }
 }
 
-
 int GenerateRandomNumber(int val){
     srand((unsigned) time(&game.time));
-
     return rand() % val;
 }
