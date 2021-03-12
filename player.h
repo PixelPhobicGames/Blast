@@ -1,7 +1,6 @@
-#define XBOX360_NAME_ID     "Xbox 360 Controller"
+#define XBOX360_NAME_ID "Xbox 360 Controller"
 
-typedef struct Player
-{
+typedef struct Player {
     /* data */
     int x;
     int y;
@@ -11,50 +10,24 @@ typedef struct Player
     int projectile_y;
     int projectile_trigger;
     int score;
+    char high_score;
     Texture2D player_1;
     Texture2D bullet_1;
     Texture2D bullet_2;
     Texture2D bullet_3;
     Music Shoot;
+}
+Player;
 
-}Player;
-
-typedef struct Projectile{
+typedef struct Projectile {
     int x;
     int y;
     int trigger;
-}Projectile;
+}
+Projectile;
 
 static Projectile projectile[10];
 
 static Player player;
 
 
-static void DrawPlayer(){
-    DrawTexture(player.player_1, player.x , player.y , WHITE);
-    if (IsKeyDown(KEY_LEFT))
-    {
-        player.x -= player.speed;
-    }
-    if (IsKeyDown(KEY_RIGHT))
-    {
-        player.x += player.speed;
-    }
-    if (IsGamepadAvailable(GAMEPAD_PLAYER1)){
-        if (IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_FACE_LEFT)){
-            player.x -= player.speed;
-        }
-        if (IsGamepadButtonDown(GAMEPAD_PLAYER1, GAMEPAD_BUTTON_LEFT_FACE_RIGHT)){
-            player.x += player.speed;
-        }
-    }
-    
-    if(player.x >= 512){
-        player.x -= player.speed;
-
-    }
-    if(player.x <= 0){
-        player.x += player.speed;
-
-    }
-}

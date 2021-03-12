@@ -45,5 +45,5 @@ void main()
     // Texel color fetching from texture sampler
     vec4 texelColor = texture(texture0, fragTexCoord);
 
-    finalColor = mix(vec4(0.0, 0.3, 0.0, 0.0), texelColor, wavePos);
+    finalColor = mix(vec4(0.0, .6, 0.0, 0.0), texelColor, wavePos);
 }

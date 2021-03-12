@@ -1,7 +1,6 @@
 #include "player.h"
-typedef struct Enemy
-{
-    /* data */
+
+typedef struct Enemy {
     int x;
     int y;
     int speed;
@@ -10,24 +9,24 @@ typedef struct Enemy
     int projectile_trigger;
     bool isalive;
 
-}Enemy;
+}
+Enemy;
 
-typedef struct EnemyTextures
-{
-    /* data */
+typedef struct EnemyTextures {
     Texture2D enemy_1;
     Texture2D enemy_2;
     // Im gonna use this struct for music too 
     Music boom;
+    Music PowerUpSound;
 
-}EnemyTextures;
+}
+EnemyTextures;
 
-typedef struct EnemyCounter
-{
-    /* data */
+typedef struct EnemyCounter {
     int count;
 
-}EnemyCounter;
+}
+EnemyCounter;
 
 typedef struct PowerupDrone {
     int x;
@@ -36,8 +35,8 @@ typedef struct PowerupDrone {
     int trigger;
     int PowerUpLength;
     Music sound;
-
-}PowerupDrone;
+}
+PowerupDrone;
 
 #define ENEMY_COUNT 20
 
@@ -46,4 +45,3 @@ static EnemyTextures enemytextures;
 static PowerupDrone powerupdrone;
 static PowerupDrone blastpowerupdrone;
 static Enemy enemy[ENEMY_COUNT];
-
