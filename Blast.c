@@ -214,7 +214,8 @@ int main(void) {
             DrawText(TextFormat("Score %i", player.score), 515, 50, 20, RED);
             DrawText(TextFormat("Round %i", game.round), 50, 50, 20, GREEN);
         }
-        if (IsKeyPressed(KEY_F)) {ToggleFullscreen();}
+        if (IsKeyPressed(KEY_F11)) {ToggleFullscreen();}
+        if (IsKeyPressed(KEY_F)) {TakeScreenshot("screen.png");}
         EndShaderMode();
         EndDrawing();
     }

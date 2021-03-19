@@ -9,7 +9,7 @@
 		endif
 	endif
   ifeq ($(PLATFORM),windows)
-    CC = C:\raylib\mingw\bin\gcc.exe
+    CC = wine C:/raylib/mingw/bin/gcc.exe
     exename ?= Blast.exe
     CFLAGS  = -s  -O3 -static -Os -std=c99 -Wall -Iexternal -DPLATFORM_DESKTOP -lopengl32 -lraylib -lgdi32 -lwinmm
   endif
